@@ -14,4 +14,14 @@ Interact with a Rest-API. Works on client and server (node.js).
 
 ## Usage
 
-Not yet
+```javascript
+var rest = require('rest-js');
+
+var restApi = new rest.Rest('https://api.github.com/', {
+  crossDomain: true
+});
+
+restApi.read('users/der-On/repos', function(error, data) {
+  ...
+});
+```
