@@ -1,6 +1,9 @@
 var path = require('path');
 var fs = require('fs');
 var browserify = require('browserify');
+var http = require('http');
+var send = require('send');
+var jake = require('jake');
 
 // cleans/removes the tmp directory
 task('clean', function(){
@@ -10,7 +13,9 @@ task('clean', function(){
 // compiles static files for browser side testing
 task('compile', function() {
   var files = new jake.FileList();
-  files.include([path.join(__dirname, './tests/**/*.js')]);
+  files.include([
+    path.join(__dirname, './tests/**/*.js')
+  ]);
 
   jake.mkdirP(path.join(__dirname, 'tmp'));
   var b = browserify(files.toArray());
@@ -18,7 +23,11 @@ task('compile', function() {
 });
 
 task('server', function(next) {
-
+  var app = http.createServer(function(req, res){
+    send(req, req.url, {
+      root: __dirname
+    }).pipe(res);
+  }).listen(3000);
 });
 
 testTask('test-server', function() {
@@ -30,4 +39,8 @@ testTask('test-server', function() {
 
 testTask('test-browser', ['clean', 'compile', 'server'], function() {
   this.testName = 'test-browser';
+  jake.exec('chrome ' + 'http://localhost:3000/tests/html/index.html',
+  function() {
+    complete();
+  });
 });
