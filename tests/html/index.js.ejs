@@ -1,0 +1,11 @@
+var file, test;
+$(document).ready(function() {
+<% files.forEach(function(file) { %>
+  file = require('<%- file %>');
+  for(var test in file) {
+    console.log(test);
+    $('body').append('<p>' + test + '</p>');
+    file[test]();
+  }
+<% }) %>
+});
