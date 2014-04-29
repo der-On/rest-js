@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var rest = require('../../index');
+var rest = require('../../../index');
 var tests;
 
 tests = {

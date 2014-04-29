@@ -10,8 +10,12 @@ Interact with a Rest-API. Works on client and server (node.js).
 ## Running tests
 
     $ npm install -g jake
-    $ jake test-server
-    $ jake test-browser
+    $ jake test
+
+By default Browser-sides tests will run in the chrome browser.
+You can override the browser(s) to use by providing a "browser" option containing a comma seperated list of browser executables:
+
+    $ jake test browser=chrome,firefox
 
 ## Browser side dependencies
 

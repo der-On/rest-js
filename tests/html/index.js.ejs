@@ -1,11 +1,31 @@
 var file, test;
 $(document).ready(function() {
-<% files.forEach(function(file) { %>
-  file = require('<%- file %>');
-  for(var test in file) {
-    console.log(test);
-    $('body').append('<p>' + test + '</p>');
-    file[test]();
-  }
-<% }) %>
+
+// monkey patch console.log
+var _log = console.log;
+console.log = function() {
+  var args = Array.prototype.slice.call(arguments, 0, arguments.length);
+  $('body').append('<p style="padding-left: 1em;">' + args.join(' ') + '</p>');
+  _log.apply(console, args);
+}
+
+try {
+  <% files.forEach(function(file) { %>
+    file = require('<%- file %>');
+    for(var test in file) {
+      console.log(test);
+      $('body').append('<p><strong>' + test + '</strong></p>');
+      file[test]();
+    }
+  <% }) %>
+  // all tests passed
+  window.close();
+} catch (error) {
+  var text = '<strong>' + error + '</strong>';
+  if (error.stack) text += '<br/>' + error.stack;
+  $('body').append('<p style="color: red;">' + text + '</p>');
+
+  // rethrow error
+  throw error;
+}
 });
