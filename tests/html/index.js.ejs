@@ -18,12 +18,18 @@ try {
     }
   <% }) %>
   // all tests passed
+  // tell the server that we are done
   $.getJSON('/done');
+
+  // and close the window
   window.close();
 } catch (error) {
   var text = '<strong>' + error + '</strong>';
   if (error.stack) text += '<br/>' + error.stack;
   $('body').append('<p style="color: red;">' + text + '</p>');
+
+  // tell the server that we are done
+  $.getJSON('/done');
 
   // rethrow error
   throw error;

@@ -120,4 +120,4 @@ jake.Task['test'].on('complete', function() {
   if (numBrowsersDone == numBrowsers) {
     process.exit(0);
   }
-})
+});
