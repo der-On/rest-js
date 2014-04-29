@@ -5,7 +5,20 @@ var http = require('http');
 var ejs = require('ejs');
 var send = require('send');
 var async = require('async');
-var staticServer;
+var numBrowsers = 0;
+var numBrowsersDone = 0;
+var serverDone = false;
+var server;
+
+function browserIsDone()
+{
+  numBrowsersDone++;
+
+  if (numBrowsersDone == numBrowsers && serverDone) {
+    console.log('all browser tests done');
+    process.exit(0);
+  }
+}
 
 // cleans/removes the tmp directory
 task('clean', function(){
@@ -44,10 +57,20 @@ task('compile', { async: true }, function() {
 });
 
 task('server', function() {
-  staticServer = http.createServer(function(req, res){
-    send(req, req.url.split('?', 2)[0], {
-      root: __dirname
-    }).pipe(res);
+  server = http.createServer(function(req, res){
+    var route = req.url.split('?', 2)[0];
+
+    switch(route) {
+      case '/done':
+        browserIsDone();
+        break;
+
+      default:
+        send(req, route, {
+          root: __dirname
+        }).pipe(res);
+    }
+
   }).listen(3000);
 });
 
@@ -56,6 +79,7 @@ task('test-browser', ['clean', 'server'], function() {
   if (process.env.browser) {
     browsers = process.env.browser.split(',');
   }
+  numBrowsers = browsers.length;
 
   jake.Task['compile'].on('complete', function() {
     var chain = [];
@@ -68,10 +92,7 @@ task('test-browser', ['clean', 'server'], function() {
     });
 
     async.parallel(chain, function(error) {
-      // close server
-      staticServer.close(function() {
-        complete();
-      });
+      complete();
     });
   });
 
@@ -85,7 +106,6 @@ testTask('test', function() {
 
   if (!process.browser) {
     jake.Task['test-browser'].on('complete', function() {
-      console.log('browser tests done');
       complete();
     });
     jake.Task['test-browser'].invoke();
@@ -93,3 +113,11 @@ testTask('test', function() {
 
   console.log('testing server ...');
 });
+
+jake.Task['test'].on('complete', function() {
+  serverDone = true;
+
+  if (numBrowsersDone == numBrowsers) {
+    process.exit(0);
+  }
+})

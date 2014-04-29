@@ -13,12 +13,12 @@ try {
   <% files.forEach(function(file) { %>
     file = require('<%- file %>');
     for(var test in file) {
-      console.log(test);
       $('body').append('<p><strong>' + test + '</strong></p>');
       file[test]();
     }
   <% }) %>
   // all tests passed
+  $.getJSON('/done');
   window.close();
 } catch (error) {
   var text = '<strong>' + error + '</strong>';
