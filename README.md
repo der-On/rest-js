@@ -11,7 +11,7 @@ Interact with a Rest-API. Works on client and server (node.js).
 
 ## Running tests
 
-    $ npm install -g jake
+    $ npm install -g jake browserify brfs
     $ jake test
 
 By default Browser-sides tests will run in the chrome browser.
