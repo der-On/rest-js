@@ -1,0 +1,8 @@
+language: node_js
+ node_js:
+   - "0.10"
+   - "0.8"
+ addons:
+   sauce_connect:
+     username: "der-On"
+     access_key: "ad426e1d-4347-4172-8c68-4b0d6af2017b"

@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jake test"
+    "test": "jake test --trace"
   },
   "repository": {
     "type": "git",
