@@ -17,6 +17,10 @@ You can override the browser(s) to use by providing a "browser" option containin
 
     $ jake test browser=chrome,firefox
 
+To skip browser testing do:
+
+    $ jake test browser=none
+
 ## Browser side dependencies
 
 You'll need jQuery for full browser support.

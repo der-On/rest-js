@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node node_modules/jake/bin/cli.js test --trace"
+    "test": "node node_modules/jake/bin/cli.js test browser=none --trace"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "ejs": "^1.0.0",
     "browserify": "^3.41.0",
     "send": "^0.3.0",
-    "async": "^0.8.0"
+    "async": "^0.8.0",
+    "brfs": "^1.1.1"
   },
   "dependencies": {
     "utilities": "0.0.34",

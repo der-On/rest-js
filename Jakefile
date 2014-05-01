@@ -26,7 +26,7 @@ task('clean', function(){
 });
 
 // compiles static files for browser side testing
-task('compile', { async: true }, function() {
+task('compile', ['clean'], { async: true }, function() {
   var files = new jake.FileList();
   files.include([
     path.join(__dirname, 'tests/browser/**/*.js'),
@@ -74,9 +74,15 @@ task('server', function() {
   }).listen(3000);
 });
 
-task('test-browser', ['clean', 'server'], function() {
+task('test-browser', function() {
   var browsers = ['chrome'];
   if (process.env.browser) {
+    // skip entire browser testing if browser=none
+    if (process.env.browser === 'none') {
+      complete();
+      return;
+    }
+
     browsers = process.env.browser.split(',');
   }
   numBrowsers = browsers.length;
@@ -96,6 +102,7 @@ task('test-browser', ['clean', 'server'], function() {
     });
   });
 
+  jake.Task['server'].invoke();
   jake.Task['compile'].invoke();
 });
 
