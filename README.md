@@ -1,6 +1,8 @@
 rest.js
 =======
 
+[![Build Status](https://travis-ci.org/der-On/rest-js.svg?branch=master)](https://travis-ci.org/der-On/rest-js)
+
 Interact with a Rest-API. Works on client and server (node.js).
 
 ## Installation (not yet)
