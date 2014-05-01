@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var browserify = require('browserify');
 var http = require('http');
 var ejs = require('ejs');
 var send = require('send');
@@ -27,6 +26,8 @@ task('clean', function(){
 
 // compiles static files for browser side testing
 task('compile', ['clean'], { async: true }, function() {
+  var browserify = require('browserify');
+
   var files = new jake.FileList();
   files.include([
     path.join(__dirname, 'tests/browser/**/*.js'),
