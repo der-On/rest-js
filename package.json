@@ -17,7 +17,7 @@
     "rest"
   ],
   "author": "Ondrej Brinkel <info@anzui.de> (http://www.anzui.de)",
-  "license": "GPL v3",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/der-On/rest-js/issues"
   },
