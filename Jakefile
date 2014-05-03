@@ -58,11 +58,15 @@ task('compile', ['clean'], { async: true }, function() {
 });
 
 task('server', function() {
+  console.log('starting server on port 3000 ...');
+
   server = http.createServer(function(req, res){
+    console.log('> ' + req.url);
     var route = req.url.split('?', 2)[0];
 
     switch(route) {
       case '/done':
+        console.log('a browser finished testing');
         browserIsDone();
         break;
 
@@ -103,11 +107,10 @@ task('test-browser', function() {
     });
   });
 
-  jake.Task['server'].invoke();
   jake.Task['compile'].invoke();
 });
 
-testTask('test', function() {
+testTask('test', ['server'], function() {
   this.testFiles.include([
     'tests/server/**/*.js'
   ]);

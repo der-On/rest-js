@@ -2,67 +2,34 @@
 
 var assert = require('assert')
   , rest = require('../../../index')
-  , tests;
+  , tests
+  , serverUrl = 'http://localhost:3000'
+  , path = require('path')
+  , fs = require('fs');
 
-tests = {
-  'RestRequest should noramlize the method to uppercase': function() {
-    var request = new rest.RestRequest('get');
-    assert.equal(request.method, 'GET');
-  },
+var fixturesPath = path.normalize(path.join(__dirname, '..', '..', 'fixtures'));
 
-  'RestRequest() should set all options correctly': function() {
-    var opts = {
-      baseUrl: 'http://base-url.com',
-      path: 'foo',
-      format: 'json',
-      query: {q: 'bar'},
-      sort: {title: 'asc'},
-      limit: 10,
-      offset: 11,
-      skip: 2,
-      perPage: 20,
-      params: {zooby: true},
-      nocase: true,
-      data: { someProp: 'someValue'},
-      headers: {
-        'X-Application': 'rest.js'
-      },
-      forceUncached: false,
-      dataType: 'json',
-      crossDomain: true
-    };
+tests = require('../../shared/lib/rest_request');
+tests['RestRequest.send() should return a valid RestResponse'] = function(next) {
+  var request = new rest.RestRequest('GET', serverUrl + '/tests/fixtures/success.json');
 
-    var request = new rest.RestRequest('GET', 'foo', opts);
-    for (var name in opts) {
-      assert.ok(typeof request[name] !== 'undefined');
-      assert.equal(typeof request[name], typeof opts[name]);
-      assert.deepEqual(request[name], opts[name]);
-    }
-  },
-  'RestRequest.prepare() should populate params correctly': function() {
-    var opts = {
-      forceUncached: true,
-      query: {q: 'search term'},
-      sort: {title: 'asc'},
-      limit: 10,
-      offset: 11,
-      skip: 20,
-      page: 2,
-      perPage: 30,
-      nocase: true
-    };
+  request.send(function(response) {
+    // there should be a response
+    assert.ok(response);
+    assert.ok(response instanceof rest.RestResponse);
 
-    var request = new rest.RestRequest('GET', 'foo', opts);
+    // there should be no error
+    assert.ok(!response.error);
 
-    request.prepare();
+    // response statusCode should be 200
+    assert.equal(response.statusCode, 200);
 
-    // t param should be populated with a timestamp
-    assert.equal(typeof request.params.t, 'number');
+    // data should match our fixture
+    var fixture = fs.readFileSync(path.join(fixturesPath, 'success.json'), { encoding: 'utf8' });
+    var fixtureJson = require(path.join(fixturesPath, 'success.json'));
+    assert.equal(response.data, fixture);
 
-    // query, sort, limit, offset, skip, page, perPage and nocase should be moved to the params
-    ['query', 'sort', 'limit', 'offset', 'skip', 'page', 'perPage', 'nocase'].forEach(function(name) {
-      assert.deepEqual(request.params[name], opts[name]);
-    });
-  }
+    next();
+  });
 };
 module.exports = tests;
