@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var http = require('http');
+var restify = require('restify');
 var ejs = require('ejs');
 var send = require('send');
 var async = require('async');
@@ -60,23 +60,40 @@ task('compile', ['clean'], { async: true }, function() {
 task('server', function() {
   console.log('starting server on port 3000 ...');
 
-  server = http.createServer(function(req, res){
+  server = restify.createServer();
+  server.use(function(req, res, next) {
     console.log('> ' + req.url);
-    var route = req.url.split('?', 2)[0];
 
-    switch(route) {
-      case '/done':
-        console.log('a browser finished testing');
-        browserIsDone();
-        break;
+    return next();
+  });
+  server.use(restify.acceptParser(server.acceptable));
+  server.use(restify.queryParser());
+  server.use(restify.bodyParser());
 
-      default:
-        send(req, route, {
-          root: __dirname
-        }).pipe(res);
-    }
+  server.get('/done', function(req, res, next) {
+    console.log('a browser finished testing');
+    browserIsDone();
 
-  }).listen(3000);
+    return next();
+  });
+  server.post('/log', function(req, res, next) {
+    console.log.apply(console, ['Browser:'].concat(req.params.args));
+  });
+  server.post('/error', function(req, res, next) {
+    throw new Error(req.params.error);
+  });
+
+  // static files
+  server.get(/^\/(.*)/, function(req, res, next) {
+    var route = req.url.split('?')[0];
+    send(req, route, {
+      root: __dirname
+    }).pipe(res);
+
+    return next();
+  });
+
+  server.listen(3000);
 });
 
 task('test-browser', function() {

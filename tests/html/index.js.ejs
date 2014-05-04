@@ -1,19 +1,20 @@
 var file, test;
-$(document).ready(function() {
 
 // monkey patch console.log
 var _log = console.log;
 console.log = function() {
   var args = Array.prototype.slice.call(arguments, 0, arguments.length);
-  $('body').append('<p style="padding-left: 1em;">' + args.join(' ') + '</p>');
+  $('body').append('<p>' + args.join(' ') + '</p>');
   _log.apply(console, args);
+  $.post('/log', { args: args });
 }
 
 try {
+  $(document).ready(function() {
   <% files.forEach(function(file) { %>
     file = require('<%- file %>');
     for(var test in file) {
-      $('body').append('<p><strong>' + test + '</strong></p>');
+      console.log('Running: ' + test);
       file[test]();
     }
   <% }) %>
@@ -22,7 +23,8 @@ try {
   $.getJSON('/done');
 
   // and close the window
-  window.close();
+  // window.close();
+  });
 } catch (error) {
   var text = '<strong>' + error + '</strong>';
   if (error.stack) text += '<br/>' + error.stack;
@@ -30,8 +32,7 @@ try {
 
   // tell the server that we are done
   $.getJSON('/done');
-
+  $.post('/error', { error: error.message });
   // rethrow error
   throw error;
 }
-});
