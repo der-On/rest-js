@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('../../server/lib/rest_filters');
+module.exports = require('../../shared/lib/rest_filters');

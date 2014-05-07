@@ -80,7 +80,7 @@ task('server', function() {
     console.log.apply(console, ['Browser:'].concat(req.params.args));
   });
   server.post('/error', function(req, res, next) {
-    throw new Error(req.params.error);
+    console.error('Browser:', req.params.error);
   });
 
   // static files

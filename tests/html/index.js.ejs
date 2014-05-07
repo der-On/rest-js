@@ -9,30 +9,46 @@ console.log = function() {
   $.post('/log', { args: args });
 }
 
-try {
-  $(document).ready(function() {
-  <% files.forEach(function(file) { %>
-    file = require('<%- file %>');
-    for(var test in file) {
-      console.log('Running: ' + test);
-      file[test]();
-    }
-  <% }) %>
-  // all tests passed
-  // tell the server that we are done
-  $.getJSON('/done');
-
-  // and close the window
-  // window.close();
-  });
-} catch (error) {
-  var text = '<strong>' + error + '</strong>';
-  if (error.stack) text += '<br/>' + error.stack;
+window.onerror = function(message, url, line) {
+  var text = '<strong>' + message + '</strong>';
+  text += '<br/>on line ' + line + ' in ' + url;
   $('body').append('<p style="color: red;">' + text + '</p>');
 
   // tell the server that we are done
+  $.post('/error', { error: message, url: url, line: line });
   $.getJSON('/done');
-  $.post('/error', { error: error.message });
+
   // rethrow error
-  throw error;
+  return false;
+};
+
+var numTests = 0;
+var testsDone = 0;
+
+function complete() {
+  testsDone++;
+
+  if (testDone == numTests) {
+    // all tests passed
+    // tell the server that we are done
+    $.getJSON('/done');
+
+    // and close the window
+    // window.close();
+  }
 }
+
+$(document).ready(function() {
+  <% files.forEach(function(file) { %>
+    file = require('<%- file %>');
+    // count all tests
+    for(var test in file) {
+      numTests++;
+    }
+
+    for(var test in file) {
+      console.log(test);
+      file[test](complete);
+    }
+  <% }) %>
+});

@@ -26,5 +26,7 @@ tests['RestRequest.send() should return a valid RestResponse'] = function(next) 
 
     next();
   });
+
+  throw new Error('foo');
 };
 module.exports = tests;
