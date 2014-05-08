@@ -72,8 +72,8 @@ task('server', function() {
 
   server.get('/done', function(req, res, next) {
     console.log('a browser finished testing');
+    res.send('');
     browserIsDone();
-
     return next();
   });
   server.post('/log', function(req, res, next) {

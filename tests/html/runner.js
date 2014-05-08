@@ -48,11 +48,16 @@ var TestRunner = function()
   {
     console.log('All tests finished.');
     // all tests passed
-    // tell the server that we are done
-    $.getJSON('/done');
 
-    // and close the window
-    // window.close();
+    setTimeout(function() {
+      // tell the server that we are done
+      $.getJSON('/done');
+
+      setTimeout(function() {
+        // and close the window
+        window.close();
+      }, 1000);
+    }, 1000);
   };
 };
 TestRunner.init = function()
