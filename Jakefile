@@ -78,9 +78,13 @@ task('server', function() {
   });
   server.post('/log', function(req, res, next) {
     console.log.apply(console, ['Browser:'].concat(req.params.args));
+    res.send('');
+    return next();
   });
   server.post('/error', function(req, res, next) {
-    console.error('Browser:', req.params.error);
+    console.error('Browser:', req.params.error + ' on line ' + req.params.line + ' in ' + req.params.url);
+    res.send('');
+    return next();
   });
 
   // static files
@@ -96,7 +100,7 @@ task('server', function() {
   server.listen(3000);
 });
 
-task('test-browser', function() {
+task('test-browser', {async: true}, function() {
   var browsers = ['chrome'];
   if (process.env.browser) {
     // skip entire browser testing if browser=none
@@ -127,7 +131,7 @@ task('test-browser', function() {
   jake.Task['compile'].invoke();
 });
 
-testTask('test', ['server'], function() {
+testTask('test', {async: true}, ['server'], function() {
   this.testFiles.include([
     'tests/server/**/*.js'
   ]);

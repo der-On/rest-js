@@ -1,54 +1,14 @@
-var file, test;
-
-// monkey patch console.log
-var _log = console.log;
-console.log = function() {
-  var args = Array.prototype.slice.call(arguments, 0, arguments.length);
-  $('body').append('<p>' + args.join(' ') + '</p>');
-  _log.apply(console, args);
-  $.post('/log', { args: args });
-}
-
-window.onerror = function(message, url, line) {
-  var text = '<strong>' + message + '</strong>';
-  text += '<br/>on line ' + line + ' in ' + url;
-  $('body').append('<p style="color: red;">' + text + '</p>');
-
-  // tell the server that we are done
-  $.post('/error', { error: message, url: url, line: line });
-  $.getJSON('/done');
-
-  // rethrow error
-  return false;
-};
-
-var numTests = 0;
-var testsDone = 0;
-
-function complete() {
-  testsDone++;
-
-  if (testDone == numTests) {
-    // all tests passed
-    // tell the server that we are done
-    $.getJSON('/done');
-
-    // and close the window
-    // window.close();
-  }
-}
-
 $(document).ready(function() {
+  TestRunner.init();
+  var testRunner = new TestRunner();
+
   <% files.forEach(function(file) { %>
     file = require('<%- file %>');
-    // count all tests
-    for(var test in file) {
-      numTests++;
-    }
 
     for(var test in file) {
-      console.log(test);
-      file[test](complete);
+      testRunner.addTest(test, file[test]);
     }
   <% }) %>
+
+  testRunner.runTests();
 });
