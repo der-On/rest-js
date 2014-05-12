@@ -1,3 +1,23 @@
 'use strict';
 
-module.exports = require('../../shared/lib/rest');
+var assert = require('assert')
+  , rest = require('../../../index')
+  , tests = require('../../shared/lib/rest')
+  , serverUrl = 'http://localhost:3000'
+  ;
+
+tests['default Rest.baseUrl should be correct'] = function() {
+  var restApi = new rest.Rest();
+  assert.strictEqual(restApi.baseUrl, 'http://localhost:3000/tests/html/index.html');
+};
+tests['Rest.request() should return correct data'] = function() {
+  var restApi = new rest.Rest('http://localhost:3000');
+
+  restApi.request('GET', '/tests/fixtures/data', function(error, data) {
+    assert.strictEqual(error, null);
+    assert.deepEqual(data, {
+      "key": "value"
+    });
+  });
+};
+module.exports = tests;

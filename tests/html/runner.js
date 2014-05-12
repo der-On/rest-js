@@ -5,6 +5,11 @@ var TestRunner = function()
   this.numTests = 0;
   this.testsRun = 0;
 
+  function scrollDown()
+  {
+    $('body').scrollTop(999999);
+  };
+
   this.addTest = function(test, callback)
   {
     this.tests.push({test: test, callback: callback});
@@ -19,6 +24,7 @@ var TestRunner = function()
   function testDone()
   {
     self.testsRun++;
+    scrollDown();
     runNextTest();
   };
 
@@ -47,6 +53,7 @@ var TestRunner = function()
   function done()
   {
     console.log('All tests finished.');
+    scrollDown();
     // all tests passed
 
     setTimeout(function() {
