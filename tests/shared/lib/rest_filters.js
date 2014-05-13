@@ -112,7 +112,7 @@ tests = {
 
     var request = new rest.RestRequest('GET', 'foo');
     assert.equal(rest.RestFilters.PARAM_FILTER_PARAMS({name: 'name', value: param} ,request), paramified);
-  }*/
+  },*/
 
   'PARAMS_FILTER_METHOD_FALLBACK should insert URL and request body param _method': function() {
     ['DELETE', 'PUT'].forEach(function(method) {

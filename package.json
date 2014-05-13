@@ -27,7 +27,8 @@
     "ejs": "1.0.0",
     "send": "0.3.0",
     "async": "0.8.0",
-    "restify": "2.7.0"
+    "restify": "2.7.0",
+    "istanbul": "^0.2.9"
   },
   "dependencies": {
     "utilities": "0.0.34",
