@@ -13,11 +13,15 @@ Interact with a Rest-API. Works on client and server (node.js).
 
 If not done yet you first need to install the global dependencies:
 
-    $ npm install -g jake browserify brfs
+    $ npm install -g jake browserify brfs istanbul
 
 Then to run the tests do:
 
     $ jake test
+
+To run the test with code coverage:
+
+    $ istanbul cover jake test
 
 By default Browser-sides tests will run in the chrome browser.
 You can override the browser(s) to use by providing a "browser" option containing a comma seperated list of browser executables:
