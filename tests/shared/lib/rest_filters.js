@@ -106,13 +106,13 @@ tests = {
     assert.equal(rest.RestFilters.PARAM_FILTER_JSON({name: 'name', value: param} ,request), jsonized);
   },
 
-  /*'PARAM_FILTER_PARAMS should return paramified object': function() {
+  'PARAM_FILTER_PARAMS should return paramified object': function() {
     var param = {foo: 'bar', list: [2, 3, 4], obj: {a: 2, b: {c: 2}}};
     var paramified = 'name[foo]=bar&name[list][0]=2&name[list][1]=3&name[list][2]=4&name[obj][a]=2&name[obj][b][c]=2';
 
     var request = new rest.RestRequest('GET', 'foo');
     assert.equal(rest.RestFilters.PARAM_FILTER_PARAMS({name: 'name', value: param} ,request), paramified);
-  },*/
+  },
 
   'PARAMS_FILTER_METHOD_FALLBACK should insert URL and request body param _method': function() {
     ['DELETE', 'PUT'].forEach(function(method) {

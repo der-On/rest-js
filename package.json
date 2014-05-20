@@ -31,7 +31,7 @@
     "istanbul": "0.2.9"
   },
   "dependencies": {
-    "utilities": "0.0.34",
+    "utilities": "0.0.36",
     "browser-request": "0.3.1",
     "request": "2.34.0"
   }
