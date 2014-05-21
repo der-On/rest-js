@@ -60,4 +60,29 @@ tests['Rest.remove() should return correct data'] = function(complete)
 {
   requestTest('remove', '/remove', { success: true }, complete);
 };
+tests['Rest.read() should cache the results when using the cacheLifetime option'] = function(complete)
+{
+  var restApi = new rest.Rest(serverUrl, { cacheLifetime: 1000 });
+
+  var firstResult = null;
+
+  restApi.read('/time', function(error, data) {
+    assert.strictEqual(error, null);
+    assert.ok(data);
+    firstResult = data;
+
+    setTimeout(function() {
+      restApi.read('/time', function(error, data) {
+        assert.deepEqual(firstResult, data);
+
+        setTimeout(function() {
+          restApi.read('/time', function(error, data) {
+            assert.notDeepEqual(firstResult, data);
+            complete();
+          });
+        }, 1500);
+      });
+    }, 10);
+  });
+};
 module.exports = tests;

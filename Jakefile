@@ -108,6 +108,10 @@ task('server', function() {
     res.send({ success: true });
     return next();
   });
+  server.get('/time.json', function(req, res, next) {
+    res.send({ time: (new Date()).getTime() });
+    return next();
+  });
 
   // static files
   server.get(/^\/(.*)/, function(req, res, next) {
