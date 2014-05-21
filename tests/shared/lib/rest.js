@@ -29,10 +29,44 @@ tests = {
     assert.strictEqual(restApi.defaultRequestOptions.crossDomain, opts.crossDomain);
   },
 
+  'Rest() should add filters when given in options': function()
+  {
+    function urlFilter() {};
+    function paramFilter() {};
+    function paramsFilter() {};
+    function optionsFilter() {};
+    function requestDataFilter() {};
+    function responseDataFilter() {};
+    function requestHeadersFilter() {};
+    function errorFilter() {};
+
+    var opts = {
+      filters: {
+        url: [urlFilter],
+        param: [paramFilter],
+        params: [paramsFilter],
+        options: [optionsFilter],
+        requestData: [requestDataFilter],
+        responseData: [responseDataFilter],
+        requestHeaders: [requestHeadersFilter],
+        error: [errorFilter]
+      }
+    };
+    var restApi = new rest.Rest(null, opts);
+    assert.notEqual(restApi.filters.url.indexOf(urlFilter), -1);
+    assert.notEqual(restApi.filters.param.indexOf(paramFilter), -1);
+    assert.notEqual(restApi.filters.params.indexOf(paramsFilter), -1);
+    assert.notEqual(restApi.filters.options.indexOf(optionsFilter), -1);
+    assert.notEqual(restApi.filters.requestData.indexOf(requestDataFilter), -1);
+    assert.notEqual(restApi.filters.responseData.indexOf(responseDataFilter), -1);
+    assert.notEqual(restApi.filters.requestHeaders.indexOf(requestHeadersFilter), -1);
+    assert.notEqual(restApi.filters.error.indexOf(errorFilter), -1);
+  },
+
   'Rest.addFilter() should add a filter': function() {
     var restApi = new rest.Rest();
     function filterFunc() {};
-    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'error'];
+    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'requestHeaders', 'error'];
 
     filterTypes.forEach(function(type) {
       restApi.addFilter(type, filterFunc);
@@ -43,7 +77,7 @@ tests = {
   'Rest.addXFilter() should add correct filter': function() {
     var restApi = new rest.Rest();
     function filterFunc() {};
-    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'error'];
+    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'requestHeaders', 'error'];
 
     filterTypes.forEach(function(type) {
       restApi['add' + utils.string.capitalize(type) + 'Filter'](filterFunc);
@@ -65,7 +99,7 @@ tests = {
     };
 
     var typesExecuted = [];
-    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'error'];
+    var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'requestHeaders', 'error'];
 
     filterTypes.forEach(function(type) {
       restApi.addFilter(type, filterFunc(type));
@@ -79,7 +113,6 @@ tests = {
       else {
         restApi.executeFilters(type, null, request);
       }
-
     });
 
     // check count of filter executions first

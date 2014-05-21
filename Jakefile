@@ -61,6 +61,7 @@ task('server', function() {
   console.log('starting server on port 3000 ...');
 
   server = restify.createServer();
+
   server.use(function(req, res, next) {
     console.log('> ' + req.url);
 
@@ -84,6 +85,27 @@ task('server', function() {
   server.post('/error', function(req, res, next) {
     console.error('Browser:', req.params.error + ' on line ' + req.params.line + ' in ' + req.params.url);
     res.send('');
+    return next();
+  });
+
+  server.post('/create.json', function(req, res, next) {
+    res.send({ success: true });
+    return next();
+  });
+  server.put('/update.json', function(req, res, next) {
+    res.send({ success: true });
+    return next();
+  });
+  server.post('/update.json', function(req, res, next) {
+    res.send({ success: true });
+    return next();
+  });
+  server.post('/remove.json', function(req, res, next) {
+    res.send({ success: true });
+    return next();
+  });
+  server.del('/remove.json', function(req, res, next) {
+    res.send({ success: true });
     return next();
   });
 
