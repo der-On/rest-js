@@ -105,7 +105,16 @@ The first parameter is the data to transform (it must be returned from the filte
 and the second one is the request or response (based on the filter).
 
 Filters are executed in the same order they got appended.
-So if a previous already appended filters executes you get the already transformed data in your filter.
+So if a previously appended filter executes you get passed the already transformed data in the next filter.
+
+Example:
+
+```javascript
+restApi.addUrlFilter(function(url, request) {
+	var transformedUrl = url.replace('bar', 'foo');
+	return transformedUrl;
+});
+```
 
 There are multiple filters available, each one for a certain case.
 They are listed in order of execution when a request get's send:
