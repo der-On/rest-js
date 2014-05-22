@@ -185,6 +185,7 @@ restApi.read('/cats', {
 	forceUncached: true, // (default = true) if true a timestamp parameter will be attached to the URL to prevent agressive browser caching
 	dataType: 'json', // the datatype to expect from the server, it will try to convert to this datatype. Possible values are: 'xml', 'html', 'json', 'jsonp', 'script', 'text', 'binary'
 	crossDomain: true, // (default = false)
+    noCache: true, // (default = false) if true the request will not be cached, even if the request cache is enabled
 }, function(error, data) {
 	...
 });
