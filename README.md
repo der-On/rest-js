@@ -5,7 +5,7 @@ rest.js
 
 Interact with a Rest-API. Works on client (browser) and server (node.js).
 
-## Installation (not yet)
+## Installation
 
     $ npm install rest-js
 
