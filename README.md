@@ -159,9 +159,11 @@ Rest auto appends the following filters already:
 
 1. **Method-Fallback** filter that adds the '_method' URL parameter containing the method to use for the request. This is an approved convention to workaround the missing capabilities of browsers to send others then GET and POST requests.
 
-2. **JSON Response-Data** filter that tries to parse incoming response data using JSON.stringify() if the expected response data type is 'json'.
+2. **JSON Request-Data** filter that tries to stringify outgoing data to JSON if the request data type is 'json'.
 
-3. **Generic Error** filter that creates an error for each response with a status code >= 400. It tries to detect the error message from the response data.
+3. **JSON Response-Data** filter that tries to parse incoming response data using JSON.stringify() if the expecte response data type is 'json'.
+
+4. **Generic Error** filter that creates an error for each response with a status code >= 400. It tries to detect the error message from the response data.
 
 ## Available request options
 
