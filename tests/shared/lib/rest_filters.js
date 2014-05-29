@@ -32,6 +32,30 @@ tests = {
     assert.equal(rest.RestFilters.RESPONSE_DATA_FILTER_JSON(invalidJson, response), invalidJson);
   },
 
+  'REQUEST_DATA_FILTER_JSON should return a JSON string': function() {
+    var data = {
+      something: 'foo'
+    };
+    var dataJSON = JSON.stringify(data);
+
+    var request = new rest.RestRequest('GET', 'foo', { dataType: 'json' });
+    assert.deepEqual(rest.RestFilters.REQUEST_DATA_FILTER_JSON(data, request), dataJSON);
+  },
+
+  'REQUEST_DATA_FILTER_JSON should return null string if given null': function() {
+    var data = null;
+
+    var request = new rest.RestRequest('GET', 'foo', { dataType: 'json' });
+    assert.strictEqual(rest.RestFilters.REQUEST_DATA_FILTER_JSON(data, request), 'null');
+  },
+
+  'REQUEST_DATA_FILTER_JSON should return same string if its a string already': function() {
+    var json = '{"some:"data"}';
+
+    var request = new rest.RestRequest('GET', 'foo', { dataType: 'json' });
+    assert.strictEqual(rest.RestFilters.REQUEST_DATA_FILTER_JSON(json, request), json);
+  },
+
   'ERROR_FILTER should not return an error when statusCode < 400 and no error in response data': function() {
     var data = {
       something: 'foo'

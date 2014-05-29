@@ -63,7 +63,7 @@ task('server', function() {
   server = restify.createServer();
 
   server.use(function(req, res, next) {
-    console.log('> ' + req.url);
+    console.log(req.method + ' > ' + req.url);
 
     return next();
   });
@@ -112,6 +112,14 @@ task('server', function() {
     res.send({ time: (new Date()).getTime() });
     return next();
   });
+
+  function pingPong(req, res, next) {
+    res.send(req.body);
+
+    return next();
+  }
+  server.post('/ping-pong.json', pingPong);
+  server.put('/ping-pong.json', pingPong);
 
   // static files
   server.get(/^\/(.*)/, function(req, res, next) {

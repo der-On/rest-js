@@ -52,4 +52,51 @@ tests['Rest.remove() should return correct data'] = function(complete)
 {
   requestTest('remove', '/remove', { success: true }, complete);
 };
+tests['Rest.create() should send correct data'] = function(complete)
+{
+  var restApi = new rest.Rest(serverUrl);
+  var data = { foo: 'bar', baz: 'zoobie' };
+  restApi.create('/ping-pong', { data: data }, function(error, _data) {
+    assert.strictEqual(error, null);
+    assert.deepEqual(_data, data);
+
+    complete();
+  });
+};
+tests['Rest.update() should send correct data'] = function(complete)
+{
+  var restApi = new rest.Rest(serverUrl);
+  var data = { foo: 'bar', baz: 'zoobie' };
+  restApi.update('/ping-pong', { data: data }, function(error, _data) {
+    assert.strictEqual(error, null);
+    assert.deepEqual(_data, data);
+
+    complete();
+  });
+};
+tests['Rest.read() should cache the results when using the cacheLifetime option'] = function(complete)
+{
+  var restApi = new rest.Rest(serverUrl, { cacheLifetime: 1000 });
+
+  var firstResult = null;
+
+  restApi.read('/time', function(error, data) {
+    assert.strictEqual(error, null);
+    assert.ok(data);
+    firstResult = data;
+
+    setTimeout(function() {
+      restApi.read('/time', function(error, data) {
+        assert.deepEqual(firstResult, data);
+
+        setTimeout(function() {
+          restApi.read('/time', function(error, data) {
+            assert.notDeepEqual(firstResult, data);
+            complete();
+          });
+        }, 1500);
+      });
+    }, 10);
+  });
+};
 module.exports = tests;
