@@ -146,6 +146,7 @@ tests = {
       assert.equal(params._method, method);
       assert.ok(request.data['_method']);
       assert.equal(request.data._method, method);
+      assert.equal(request.headers['X-HTTP-METHOD-OVERRIDE'], method);
     });
   }
 };
