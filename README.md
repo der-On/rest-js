@@ -120,8 +120,8 @@ There are multiple filters available, each one for a certain case.
 They are listed in order of execution when a request get's send:
 
 1. **_options_** - callback({...}, request) transform request options
-2. **_requestData_** - callback({...}, request) transform request data
-3. **_params_** - callback({...}, request) transform an URL parameter object
+2. **_params_** - callback({...}, request) transform an URL parameter object
+3. **_requestData_** - callback({...}, request) transform request data
 4. **_param_** - callback({ name: ..., value: ... }, request) transform an URL parameter to a String
 5. **_url_** - callback(url, request) transform final URL before request get's send
 6. **_reqeuestHeaders_** - callback({...}, request) transform outgoing request headers
