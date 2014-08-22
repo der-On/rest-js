@@ -1,7 +1,7 @@
 {
   "name": "rest-js",
   "main": "index.js",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "homepage": "https://github.com/der-On/rest-js",
   "authors": [
     "Ondrej Brinkel <info@anzui.de>"
@@ -18,5 +18,8 @@
     "test",
     "tests",
     "tmp"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
 }
