@@ -3,7 +3,7 @@
 var assert = require('assert')
   , rest = require('../../../index')
   , tests
-  , utils = require('utilities')
+  , utils = require('../../../lib/utils')
   , serverUrl = 'http://localhost:3000';
 
 tests = {
@@ -80,7 +80,7 @@ tests = {
     var filterTypes = ['url', 'param', 'params', 'options', 'requestData', 'responseData', 'requestHeaders', 'error'];
 
     filterTypes.forEach(function(type) {
-      restApi['add' + utils.string.capitalize(type) + 'Filter'](filterFunc);
+      restApi['add' + utils.capitalize(type) + 'Filter'](filterFunc);
       assert.ok(restApi.filters[type].indexOf(filterFunc) !== -1);
     });
   },
