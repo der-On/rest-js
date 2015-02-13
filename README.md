@@ -32,12 +32,6 @@ To skip browser testing do:
 
     $ jake test browser=none
 
-## Browser side dependencies
-
-You'll need jQuery for full browser support.
-If jQuery is not present it will fallback to make requests using [browser-request](https://www.npmjs.org/package/browser-request).
-This is however not fully compatible to all browser yet.
-
 ## Usage
 
 ```javascript
