@@ -1,6 +1,6 @@
 {
   "name": "rest-js",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Interact with a Rest-API. Works on client and server (node.js).",
   "main": "index.js",
   "directories": {
