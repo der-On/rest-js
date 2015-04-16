@@ -46,6 +46,8 @@ restApi.read('users/der-On/repos', function(error, data) {
 });
 ```
 
+All methods also return a promise.
+
 ## CRUD methods
 
 ```javascript
