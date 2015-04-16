@@ -172,6 +172,15 @@ tests = {
         });
       }, 10);
     });
+  },
+
+  'Rest.request() should return a promise': function(complete)
+  {
+    var restApi = new rest.Rest(serverUrl);
+
+    var promise = restApi.request('GET', '/time');
+    assert.ok(promise instanceof Promise);
+    complete();
   }
 };
 module.exports = tests;

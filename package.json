@@ -1,6 +1,6 @@
 {
   "name": "rest-js",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "description": "Interact with a Rest-API. Works on client and server (node.js).",
   "main": "index.js",
   "directories": {
@@ -32,6 +32,7 @@
     "send": "0.3.0"
   },
   "dependencies": {
+    "es6-promise": "^2.1.0",
     "superagent": "^0.21.0"
   }
 }
