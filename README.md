@@ -52,12 +52,16 @@ All methods also return a promise.
 
 ```javascript
 restApi.read('/cats', [options, callback]); // GET -> /cats
+restApi.get(/*...*/); // alias to .read
 
 restApi.remove('/cats/10', [options, callback]); // DELETE -> /cats/10
+restApi.del(/*...*/); // alias to .remove
 
 restApi.create('/cats', [options, callback]); // POST -> /cats
+restApi.post(/*...*/); // alias to .create
 
 restApi.update('/cats/10', [options, callback]); // PUT -> /cats/10
+restApi.put(/*...*/); // alias to .update
 ```
 
 You can also send a rest-request with any available HTTP method using
@@ -86,80 +90,56 @@ var restApi = new rest.Rest('https://api.github.com/', {
     defaultFormat: 'json', // (default = 'json') default file format to use, will be appended as a suffix to the requested path (e.g. /cats -> /cats.json)
     defaultDataType: 'json', // (default = 'json') default expected data type
     crossDomain: false, // (default = false)
-    filters: { url: [...], param: [...], ... }, // Object containing lists of initial filters. Each filter is a callback function. See "Filters" below.
     cacheLifetime: 5000, // (default = 0) lifetime of URL based response cache in ms (only GET requests are cached). If set to 0 no caching will happen.
 });
 ```
 
-## Filters
+## Middlewares
 
-Filters allow transormation or manipulation of request and response data.
+Middlewares or filters allow transormation or manipulation of request and response data.
 
-Filters are simple callback functions that get passed two parameters:
+They are simple callback functions that get passed two or more parameters.
 
-The first parameter is the data to transform (it must be returned from the filter callback!)
-and the second one is the request or response (based on the filter).
+The last parameter is always a callback function that needs to be called, once the filter has done it's work.
+If you pass an error to the callback it will be passed to the error middleware.
 
-Filters are executed in the same order they got appended.
-So if a previously appended filter executes you get passed the already transformed data in the next filter.
+- if using two parameters: request, next
+- if using three parameters: request, response, next
+- if using four parameters: error, request, response, next
+
+Middlewares are executed in the same order they got appended.
+So if a previously appended middleware executes you get passed the already transformed data in the next middleware.
 
 Example:
 
 ```javascript
-restApi.addUrlFilter(function(url, request) {
-	var transformedUrl = url.replace('bar', 'foo');
-	return transformedUrl;
+restApi.use(function(request, next) {
+	var transformedUrl = request.url.replace('bar', 'foo');
+	nexst();
 });
 ```
 
-There are multiple filters available, each one for a certain case.
-They are listed in order of execution when a request get's send:
-
-1. **_options_** - callback({...}, request) transform request options
-2. **_params_** - callback({...}, request) transform an URL parameter object
-3. **_requestData_** - callback({...}, request) transform request data
-4. **_param_** - callback({ name: ..., value: ... }, request) transform an URL parameter to a String
-5. **_url_** - callback(url, request) transform final URL before request get's send
-6. **_reqeuestHeaders_** - callback({...}, request) transform outgoing request headers
-7. **_responseData_** - callback(data, response) transform incoming response data (response body)
-8. **_error_** - callback(error, response) transform/create errors from the incoming response
-
-You can add filters by passing them to the Rest() constructor or using these methods:
+You can add middlewares using the `.use()` method:
 
 ```javascript
-restApi.addFilter(type, callback);  // add a filter for any valid filter type
-
-// or use one of the aliases
-restApi.addUrlFilter(callback);
-restApi.addParamFilter(callback);
-restApi.addParamsFilter(callback);
-restApi.addOptionsFilter(callback);
-restApi.addRequestDataFilter(callback);
-restApi.addResponseDataFilter(callback);
-restApi.addRequestHeadersFilter(callback);
-restApi.addErrorFilter(callback);
+restApi.use(callback);  // add a middleware
 ```
 
 You can also remove already appended filters:
 
 ```javascript
-restApi.removeFilter(type, callback); // remove a filter for any valid filter type
-
-// or use one of the aliases
-restApi.removeUrlFilter(callback);
-restApi.removeParamFilter(callback);
-...
+restApi.unuse(callback); // remove a middleware
 ```
 
 Rest auto appends the following filters already:
 
-1. **Method-Fallback** filter that adds the '_method' URL parameter containing the method to use for the request. This is an approved convention to workaround the missing capabilities of browsers to send others then GET and POST requests.
+1. **Method-Fallback** middleware that adds the '_method' URL parameter containing the method to use for the request. This is an approved convention to workaround the missing capabilities of browsers to send others then GET and POST requests.
 
-2. **JSON Request-Data** filter that tries to stringify outgoing data to JSON if the request data type is 'json'.
+2. **JSON Request-Data** middleware that tries to stringify outgoing data to JSON if the request data type is 'json'.
 
-3. **JSON Response-Data** filter that tries to parse incoming response data using JSON.stringify() if the expecte response data type is 'json'.
+3. **JSON Response-Data** middleware that tries to parse incoming response data using JSON.stringify() if the expecte response data type is 'json'.
 
-4. **Generic Error** filter that creates an error for each response with a status code >= 400. It tries to detect the error message from the response data.
+4. **Generic Error** middleware that creates an error for each response with a status code >= 400. It tries to detect the error message from the response data.
 
 ## Available request options
 

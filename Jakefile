@@ -70,7 +70,7 @@ task('server', function() {
   server.use(restify.acceptParser(server.acceptable));
   server.use(restify.queryParser());
   server.use(restify.bodyParser());
-
+  
   server.get('/done', function(req, res, next) {
     console.log('a browser finished testing');
     res.send('');
