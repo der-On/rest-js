@@ -7,6 +7,11 @@ var assert = require('assert')
   , serverUrl = 'http://localhost:3000';
 
 tests = {
+  'rest() should create new rest api instance': function () {
+    var restApi = rest();
+    assert.ok(restApi);
+  },
+
   'Rest() should set correct defaultRequestOptions when no options are given': function() {
     var restApi = new rest.Rest();
     assert.deepEqual(restApi.defaultRequestOptions.params, {});

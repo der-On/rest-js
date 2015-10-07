@@ -37,7 +37,7 @@ To skip browser testing do:
 ```javascript
 var rest = require('rest-js');
 
-var restApi = new rest.Rest('https://api.github.com/', {
+var restApi = rest('https://api.github.com/', {
   crossDomain: true
 });
 
@@ -85,7 +85,7 @@ restApi.create('/cats', {
 ## Available constructor options
 
 ```javascript
-var restApi = new rest.Rest('https://api.github.com/', {
+var restApi = rest('https://api.github.com/', {
     defaultParams: { ... }, // parameters that should be send with every request
     defaultFormat: 'json', // (default = 'json') default file format to use, will be appended as a suffix to the requested path (e.g. /cats -> /cats.json)
     defaultDataType: 'json', // (default = 'json') default expected data type
