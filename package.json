@@ -25,11 +25,11 @@
   "devDependencies": {
     "async": "0.8.0",
     "browserify": "^6.3.3",
-    "ejs": "1.0.0",
+    "ejs": "2.5.7",
     "istanbul": "0.2.9",
     "jake": "0.7.11",
     "restify": "2.7.0",
-    "send": "0.3.0"
+    "send": "0.16.1"
   },
   "dependencies": {
     "es6-promise": "^2.1.0",
